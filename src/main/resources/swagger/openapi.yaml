@@ -1,0 +1,617 @@
+openapi: 3.0.1
+info:
+  title: dados-prop
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local development
+tags:
+  - name: cadastro
+    description: Realize cadastro de clientes
+paths:
+  /v1/varejo/customer-registration:
+    post:
+      tags:
+        - cadastro
+      summary: Solicita cadastro cliente
+      description: Nessa Operacao sao recebidos os dados para cadastro do cliente
+      operationId: postInitialCustomerRegistration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRegistrationRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerRegistrationResponse'
+        400:
+          $ref: '#/components/responses/badRequestError'
+        500:
+          $ref: '#/components/responses/internalServerError'
+
+      # security:
+      #   - Bearer: []
+
+components:
+
+  schemas:
+    CustomerRegistrationRequest:
+      type: object
+      properties:
+        customer:
+          type: object
+          properties:
+            cpfNumber:
+              type: string
+              minLength: 11
+              maxLength: 11
+              description: CPF do proponente
+            email:
+              type: string
+              description: Endereço de Email
+            rgNumber:
+              type: string
+              description: RG do proponente
+            name:
+              type: string
+              description: Nome do proponente
+            dateOfBirth:
+              type: string
+              format: date
+              description: Data de nascimento do proponente
+            mothersName:
+              type: string
+              description: Nome da mãe do proponente
+            maritalStatus:
+              type: string
+              description: Estado civil
+              enum:
+                - DESQUITADO
+                - DIVORCIADO
+                - SEPARADO
+                - SOLTEIRO
+                - CASADO
+                - VIUVO
+                - OUTROS
+            gender:
+              type: string
+              description: Sexo
+              enum:
+                - MASCULINO
+                - FEMININO
+                - NAO_INFORMADO
+            residenceType:
+              type: string
+              description: Tipo de residência
+              enum:
+                - PROPRIO
+                - FAMILIAR
+                - ALUGADO
+                - PROPRIO_FINANCIADO
+                - CEDIDO
+                - OUTROS
+            propertyValue:
+              type: number
+              format: double
+              description: Valor de patrimônio
+            nationality:
+              type: string
+              description: Nascionalidade do proponente
+              enum:
+                - BRASILEIRO
+                - ESTRANGEIRO
+            numberOfDependents:
+              type: integer
+              description: Quantidade de dependentes
+            birthPlace:
+              type: object
+              description: Naturalidade / Local de nascimento
+              properties:
+                state:
+                  type: string
+                  description: Sigla da UF da cidade de nascimento
+                  enum:
+                    - AC
+                    - AL
+                    - AP
+                    - AM
+                    - BA
+                    - CE
+                    - DF
+                    - ES
+                    - GO
+                    - MA
+                    - MT
+                    - MS
+                    - MG
+                    - PA
+                    - PB
+                    - PR
+                    - PE
+                    - PI
+                    - RJ
+                    - RN
+                    - RS
+                    - RO
+                    - RR
+                    - SC
+                    - SP
+                    - SE
+                    - TO
+                cityName:
+                  type: string
+                  description: Nome da cidade de nascimento
+              required:
+                - state
+                - cityName
+            ocupation:
+              type: object
+              description: Informações sobre a profissão
+              properties:
+                employerDocument:
+                  type: string
+                  description: CNPJ da empresa conveniada
+                employeeRegistry:
+                  type: string
+                  description: Matrícula do proponente na empresa
+                admissionDate:
+                  type: string
+                  format: date
+                  description: Data de admissão
+                netSalary:
+                  type: number
+                  format: double
+                  description: Salário bruto
+                consignableMargin:
+                  type: string
+                  format: double
+                  description: Margem consignável
+                profession:
+                  type: string
+                  enum:
+                    - ENGENHEIRO
+                    - ARQUITETO_OU_PAISAGISTA
+                    - AGRONOMO
+                    - QUIMICO
+                    - DESENHISTA_INDUSTRIAL
+                    - FISICO
+                    - GEOLOGO
+                    - TECNOLOGO
+                    - MEDICO
+                    - VETERINARIO_OU_ZOOTECNISTA
+                    - ENFERMEIRO
+                    - FISIOTERAPEUTA_OU_TERAPEUTA_OCUPACIONAL
+                    - ODONTOLOGO
+                    - BIOLOGO_OU_BIOMEDICO
+                    - FARMACEUTICO
+                    - FONOAUDIOLOGO
+                    - ECONOMISTA
+                    - ESTATISTICO
+                    - MATEMATICO_E_ATUARIO
+                    - CONTADOR
+                    - ADMINISTRADOR
+                    - ANALISTA_DE_SISTEMA
+                    - GEOGRAFO
+                    - ASTRONOMO
+                    - ADVOGADO
+                    - PSICOLOGO_E_PSICANALISTA
+                    - SOCIOLOGO
+                    - ASSISTENTE_SOCIAL
+                    - BIBLIOTECARIO_OU_ARQUIVISTA
+                    - COMUNICOLOGO
+                    - RELACOES_PUBLICAS
+                    - PROFISSIONAL_DE_LETRAS_E_ARTES
+                    - PROFESSOR_DE_ENSINO_SUPERIOR
+                    - PROFESSOR_DE_ENSINO_FUNDAMENTAL_E_MEDIO
+                    - PEDAGOGO
+                    - AUXILIAR_DE_NUTRICAO
+                    - TECNICO_DE_CONTABILIDADE_E_DE_ESTATISTICA
+                    - TECNICO_DE_BIOLOGIA
+                    - TECNICO_AGRICOLA
+                    - TECNICO_DE_QUIMICA
+                    - TECNICO_DE_MECANICA
+                    - TECNICO_DE_ELETRICIDADE_ELETRONICA_E_TELECOMUNICACOES
+                    - TECNICO_DE_LABORATORIO_E_RAIOS_X
+                    - DESENHISTA_TECNICO
+                    - EMPRESARIO_E_PRODUTOR_DE_ESPETACULOS_PUBLICOS
+                    - ATOR_E_DIRETOR_DE_ESPETACULOS_PUBLICOS
+                    - CANTOR_E_COMPOSITOR
+                    - MUSICO
+                    - COREOGRAFO_E_BAILARINO
+                    - LOCUTOR_E_COMENTARISTA_DE_RADIO_E_TELEVISAO_E_RADIALISTA
+                    - TECNICO_EM_AUDIO_E_CENOGRAFIA
+                    - ATLETA_PROFISSIONAL_E_TECNICO_EM_DESPORTOS
+                    - JORNALISTA
+                    - PUBLICITARIO
+                    - PILOTO_DE_AERONAVES
+                    - AEROVIARIO
+                    - ESCULTOR_PINTOR_OU_ASSEMELHADO
+                    - DESENHISTA_COMERCIAL
+                    - DECORADOR
+                    - ARTESAO
+                    - SENADOR_DA_REPUBLICA
+                    - MINISTRO_DE_ESTADO
+                    - DESEMBARGADOR
+                    - PROCURADOR_DA_JUSTICA_E_ASSEMELHADOS
+                    - DIPLOMATA
+                    - OFICIAL_DAS_FORCAS_ARMADAS_E_FORCAS_AUXILIARES
+                    - SERVENTUARIO_DE_JUSTICA
+                    - MILITAR_EM_GERAL
+                    - SERVIDOR_PUBLICO_FEDERAL
+                    - SERVIDOR_PUBLICO_ESTADUAL
+                    - SERVIDOR_PUBLICO_MUNICIPAL
+                    - ANALISTA
+                    - OPERADOR_DE_COMPUTADORES
+                    - PROGRAMADOR_DE_SISTEMA
+                    - TRAB_DE_SERVICOS_DE_CONTABILIDADE_CAIXA_E_ASSEMELHADOS
+                    - SECRETARIO_ESTENOGRAFO_DATIL_RECEP_TELEF_TRAB_ASSEMELHADOS
+                    - BANCARIO_E_ECONOMIARIO
+                    - SECURITARIO
+                    - ESCREVENTE_AUXILIAR_DE_CARTORIO
+                    - REPRESENTANTE_COMERCIAL
+                    - CORRETOR
+                    - LEILOEIRO_AVALIADOR_E_ASSEMELHADOS
+                    - AGENCIADOR_DE_PROPAGANDA
+                    - AMBULANTE
+                    - VENDEDOR_DE_COMERCIO_VAREJISTA_E_ATACADISTA
+                    - JORNALEIRO
+                    - FEIRANTE
+                    - COMERCIARIO
+                    - MODELO_DE_MODAS
+                    - PROMOTOR_DE_VENDAS_E_DEMONSTRADOR
+                    - PORTEIRO_DE_EDIFICIO_ASCENSORISTA_E_GARAGISTA
+                    - ZELADOR_DE_EDIFICIO
+                    - BARBEIRO_CABELEIREIRO_MANICURE_E_PEDICURE
+                    - ACOUGUEIRO
+                    - COZINHEIRO_COPEIRO_GARCOM_BARMEN_E_CAMAREIRO
+                    - MOTORISTA_DE_VEICULOS_DE_TRANSPORTE_DE_PASSAGEIROS
+                    - MOTORISTA_DE_VEICULOS_DE_TRANSPORTE_DE_CARGA
+                    - MARINHEIRO
+                    - MAQUINISTA_E_FOGUISTA_DE_EMBARCACOES_LOCOMOTIVAS_E_ASSEMELHA
+                    - TAXISTA
+                    - COBRADOR_DE_TRANSPORTE_COLETIVO
+                    - FISCAL_AUDITOR_E_ASSEMELHADOS
+                    - MECANICO_DE_MANUTENCAO_DE_VEICULOS_AUTOMOTORES
+                    - ELETRICISTA_E_ASSEMELHADOS
+                    - FUNILEIRO
+                    - BORRACHEIRO
+                    - ALFAIATE
+                    - PROTETICO
+                    - DESPACHANTE_INCLUSIVE_O_ADUANEIRO
+                    - AGENTE_DE_VIAGEM_E_GUIA_DE_TURISMO
+                    - SAPATEIRO_E_DEMAIS_TRAB_DE_CALCADOS_E_ARTEFATOS_DE_COURO
+                    - AGRICULTOR
+                    - PECUARISTA
+                    - TRABALHADOR_FLORESTAL
+                    - PESCADOR
+                    - GARIMPEIRO
+                    - FOTOGRAFO
+                    - MISSIONARIO
+                    - ESTUDANTE
+                    - DELEGADO_DE_POLICIA
+                    - ARMEIRO
+                    - MESTRE_E_CONTRAMESTRE
+                    - JOALHEIRO_E_OURIVES
+                    - METALURGICO_E_SIDERURGICO
+                    - COSTUREIRO
+                    - GARI_OU_VARREDOR_DE_LOGRADOUROS_PUBLICOS
+                    - FERRAMENTEIRO
+                    - TRABALHADOR_DE_USINAGEM_DE_METAIS
+                    - SERRALHEIRO
+                    - TIPOGRAFO_E_DEMAIS_TRABALHADORES_DE_ARTES_GRAFICAS
+                    - SUPERVISOR_INSPETOR_E_AGENTE_DE_COMPRAS_E_VENDAS
+                    - TECNICO_INSTRUMENTISTA
+                    - MECANICO_DE_MANUTENCAO_DE_MAQUINAS_INDUSTRIAIS
+                    - AGENTE_ADMINISTRATIVO
+                    - TABELIAO_OFICIAL_DE_REGISTRO
+                    - VENDEDOR_PRACISTA_E_CAIXEIRO_VIAJANTE
+                    - TORNEIRO_MECANICO
+                    - MOTORISTA_OPERADOR_DE_MAQUINAS_PESADAS
+                    - TRABALHADOR_DE_CONSTRUCAO_CIVIL
+                    - MARCENEIRO_E_TRAB.ARTEFATOS_MADEIRA
+                    - AUXILIAR_DE_ESCRITORIO_E_ASSEMELHADOS
+                    - AUXILIAR_DE_ENFERMAGEM
+                    - LANTERNEIRO_E_PINTOR_DE_VEICULOS
+                    - AUXILIAR_DE_LABORATORIO_E_RAIOS_X
+                    - AUXILIAR_DE_SERVICOS_GERAIS
+                    - FRENTISTA
+                    - SEGURANCA_VIGILANTE
+                    - MOTOCICLISTA_TRANSP_DE_MERCADORIAS_EOU_ASSEMELHADOS
+                    - JARDINEIRO
+                    - EMPREGADO_DOMESTICO
+                    - TRABALHADOR_RURAL
+                    - MASSAGISTA
+                    - INDUSTRIARIO
+                    - EMPRESARIO
+                    - CAPITALISTA_RENTISTA_LOCADOR
+                    - BOMBEIRO_E_INSTALADOR_DE_GAS_AGUA_ESGOTO_E_ASSEMELHADOS
+                    - TRABALHADOR_DE_FABRICACAO_DE_ROUPAS
+                    - APOSENTADO_PENSIONISTA
+                    - PASTOR
+                    - ESTAGIARIO_E_ASSEMELHADOS
+                    - DO_LAR
+                    - TRABALHADOR_INFORMAL
+                    - ESTIVADOR_CARREGADOR_EMBALADOR_E_ASSEMELHADOS
+                    - TRABALHADOR_DE_INSTALACOES_DE_PROCESSAMENTO_QUIMICO
+                    - TRABALHADOR_DE_FABRICACAO_E_PREPARACAO_DE_ALIMENTOS_E_BEBIDA
+                    - TRABALHADOR_DE_FABRICACAO_DE_PAPEL_E_PAPELAO
+                    - TRABALHADOR_DE_FABRICACAO_DE_PRODUTOS_DE_BORRACHA_E_PLASTICO
+                    - ACUPUNTURISTA
+                    - AERONAUTA
+                    - ANTROPOLOGO
+                    - ARTISTA_PLASTICO
+                    - ASTROLOGO_NUMEROLOGO_E_AFINS
+                    - BIOFISICO
+                    - BIOQUIMICO
+                    - CARTEIRO
+                    - CHAVEIRO
+                    - ECOLOGISTA
+                    - ELETRICITARIO
+                    - ESCRITOR
+                    - AGENTE_DE_SERVICOS_FUNERARIOS_E_EMBALSAMADOR
+                    - FILOLOGO
+                    - FILOSOFO
+                    - CENOGRAFO
+                    - FLORICULTOR
+                    - TRABALHADOR_DE_EXTRACAO_DE_MINERIOS
+                    - MODISTA
+                    - OCEANOGRAFO
+                    - OLEIRO
+                    - PADEIRO_E_CONFEITEIRO
+                    - POLICIAL_CIVIL
+                    - RADIOTECNICO
+                    - RELOJOEIRO
+                    - SACERDOTE
+                    - SUCATEIRO
+                    - TAQUIGRAFO
+                    - TRADUTOR
+                    - VIDRACEIRO
+                    - ARQUEOLOGO_E_MUSEOLOGO
+                    - METEOROLOGISTA
+                    - NUTRICIONISTA
+                    - ANTIQUARIO
+                    - APICULTOR
+                    - AVICULTOR
+                    - REDATOR
+                    - CERAMISTA
+                    - HISTORIADOR
+                    - OPTICO
+                    - ORNITOLOGO
+                    - RODOVIARIO
+                    - TAPECEIRO
+                    - TINTUREIRO
+                    - TOPOGRAFO
+                    - AGRIMENSOR
+                    - PESQ_PRODUC_DE_MUDAS_OU_SEMENT_FISCALIZADAS_CERTIFICADAS
+                    - AGROPECUARISTA
+                    - PESQ_PRODUC_DE_SEMEM_PARA_INSEMINACAO_ARTIFICIAL
+                    - PREST_SERV_MECANIZAD_NATURAL_RURAL_INCLUSIVE_PROTECAO_SOLO
+                    - PREST_SERV_DE_INSEMINACAO_ARTIFICIAL_EM_IMOVEL_RURAL
+                    - PESCADOR_COM_FINS_COMERCIAIS
+                    - ADMINISTRADOR_DE_COMARCA
+                    - MAGISTRADO
+                    - INSTRUTOR
+                    - FAXINEIRO
+                    - PORTUARIO
+                    - FERROVIARIO
+                    - TECNICO_EM_SEGURANCA_DO_TRABALHO
+                    - TECNICO_DE_INFORMATICA
+                    - SALVA_VIDAS_OU_BOMBEIRO_PARTICULAR_AUTONOMO
+                    - OPERADOR_DE_MAQUINAS_AGROPECUARIAS
+                    - AQUICULTOR
+                    - ESTETICISTA
+                    - DETETIVE_PARTICULAR
+                    - TECNICO_DE_EDIFICACOES
+                    - MODELISTA_E_OU_CORTADOR_VESTUARIO
+                    - PRESIDENTE_DA_REPUBLICA
+                    - VICE_PRESIDENTE_DA_REPUBLICA
+                    - GOVERNADOR_DE_ESTADO_DISTRITO_FEDERAL
+                    - DEPUTADO_FEDERAL
+                    - DEPUTADO_ESTADUAL_DISTRITAL
+                    - VEREADOR
+                    - PROMOTOR_DE_JUSTICA
+                    - PREFEITO_MUNICIPAL
+                    - VICE_PREFEITO_MUNICIPAL
+                    - SECRETARIO_FEDERAL
+                    - SECRETARIO_ESTADUAL
+                    - SECRETARIO_MUNICIPAL
+                    - OFICIAL_DE_JUSTICA
+                    - CONSULTOR_LEGISLATIVO
+                    - CORREGEDOR
+                    - MERGULHADOR
+                    - AGENTE_COMUNITARIO_DE_SAUDE
+                    - BOLSISTA_MESTRADO_DOUTORADO
+                    - MENOR_SEM_ATIVIDADE
+                    - VICE_GOVERNADOR_DE_ESTADO_DISTRITO_FEDERAL
+                    - BOLSISTA_OUTROS
+                    - TRABALHADOR_DE_EXTRACAO_VEGETAL
+                    - TECNICO_DE_ENFERMAGEM
+                    - DEFENSOR_PUBLICO
+                    - APRENDIZ_BANCO_DO_BRASIL
+                    - OPERADOR_DE_TELEMARKETING
+                    - DISCOTECARIO_VIDEOTECARIO_E_AFINS
+                    - ADMINISTRADOR_DE_TRIBUNAL
+                    - MILITAR_DAS_FORCAS_ARMADAS_EXERCITO
+                    - MILITAR_DAS_FORCAS_ARMADAS_MARINHA
+                    - MILITAR_DAS_FORCAS_ARMADAS_AERONAUTICA
+                    - CAPITALISTA
+                    - RENTISTA_OU_LOCADOR
+                    - ESPOLIO
+                    - CONSELHEIRO_TUTELAR
+                    - PROFESSOR_DEMAIS
+                    - DESENHISTA
+                    - MOTORISTA
+              required:
+                - employerDocument
+                - employeeRegistry
+                - admissionDate
+                - netSalary
+            address:
+              $ref: "#/components/schemas/Address"
+            phone:
+              $ref: "#/components/schemas/Phone"
+          required:
+            - cpfNumber
+            - email
+            - rgNumber
+            - name
+            - dateOfBirth
+            - mothersName
+            - maritalStatus
+            - gender
+            - nationality
+            - ocupation
+            - addresses
+            - phones
+      required:
+        - offer
+        - customer
+        - bankAccount
+
+    Phone:
+      type: object
+      properties:
+        areaCode:
+          type: string
+          description: DDD
+        number:
+          type: string
+          description: Telefone
+        extension:
+          type: string
+          description: Ramal
+      required:
+        - areaCode
+        - number
+
+    Address:
+      type: object
+      properties:
+        mailingIndicator:
+          type: boolean
+          description: Correspondência
+        postalCode:
+          type: string
+          description: CEP do endereço
+        street:
+          type: string
+          description: Logradouro
+        neighborhood:
+          type: string
+          description: Bairro
+        number:
+          type: string
+          description: Número
+        complement:
+          type: string
+          description: Complemento
+        city:
+          type: string
+          description: Cidade
+        state:
+          type: string
+          description: Estado
+          enum:
+            - AC
+            - AL
+            - AP
+            - AM
+            - BA
+            - CE
+            - DF
+            - ES
+            - GO
+            - MA
+            - MT
+            - MS
+            - MG
+            - PA
+            - PB
+            - PR
+            - PE
+            - PI
+            - RJ
+            - RN
+            - RS
+            - RO
+            - RR
+            - SC
+            - SP
+            - SE
+            - TO
+      required:
+        - mailingIndicator
+        - postalCode
+        - street
+        - neighborhood
+        - number
+        - city
+        - state
+
+    CustomerRegistrationResponse:
+      type: object
+      properties:
+        clientId:
+          type: integer
+          description: Numero id gerado do cliente.
+
+    ResponseError:
+      type: object
+      properties:
+        code:
+          description: Código de erro específico do endpoint
+          type: string
+          maxLength: 255
+        detail:
+          description: Descrição legível por humanos deste erro específico
+          type: string
+          pattern: \w*\W*
+          example: Descrição legível por humanos deste erro específico
+          maxLength: 2048
+        errors:
+          description: Lista com erros gerados
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+
+    Error:
+      type: object
+      properties:
+        class:
+          type: string
+          description: Classe de origem do erro específico
+          example: CustomerRegistrationRequest
+        field:
+          type: string
+          description: Campo de origem do erro específico
+          example: customer.cpfNumber
+        error:
+          type: string
+          description: Descrição legível por humanos do erro específico
+          example: Campo não pode ser nulo
+
+  responses:
+    badRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ResponseError"
+
+    internalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ResponseError"
+
+
+  # securitySchemes:
+  #   Bearer:
+  #     type: http
+  #     scheme: bearer
+  #     bearerFormat: JWT
