@@ -1,6 +1,7 @@
 package sboot.atom.dados.prop.app.mapper;
 
 import br.com.atom.dados.prop.representation.CustomerRegistrationRequestCustomer;
+import br.com.atom.dados.prop.representation.CustomerRegistrationResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import sboot.atom.dados.prop.app.domain.Customer;
@@ -26,4 +27,5 @@ public interface CustomerMapper {
     @Mapping(target = "phone", source = "customer.phone")
     Customer toCustomer(CustomerRegistrationRequestCustomer customer);
 
+    CustomerRegistrationResponse toCustomerRegistrationResponse(Long clientId);
 }

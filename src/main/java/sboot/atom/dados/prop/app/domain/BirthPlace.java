@@ -16,6 +16,8 @@ public class BirthPlace {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "local_state")
+    @Enumerated(EnumType.STRING)
     private Address.StateEnum state;
     private String cityName;
     @OneToOne(mappedBy = "birthPlace")

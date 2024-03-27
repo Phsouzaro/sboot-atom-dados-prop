@@ -555,12 +555,9 @@ components:
     CustomerRegistrationResponse:
       type: object
       properties:
-        Offer:
-          type: object
-          properties:
-            clientId:
-              type: integer
-              description: Numero id gerado do cliente.
+        clientId:
+          type: integer
+          description: Numero id gerado do cliente.
 
     ResponseError:
       type: object

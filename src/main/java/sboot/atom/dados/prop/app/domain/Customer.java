@@ -20,9 +20,13 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String cpfNumber;
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String rgNumber;
+    @Column(name = "full_name")
     private String name;
     private Date dateOfBirth;
     private String mothersName;
