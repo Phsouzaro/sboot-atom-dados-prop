@@ -1,10 +1,13 @@
 package sboot.atom.dados.prop.app.mapper;
 
-import br.com.atom.dados.prop.representation.CustomerRegistrationRequestCustomer;
-import br.com.atom.dados.prop.representation.CustomerRegistrationResponse;
+import br.com.atom.dados.prop.representation.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import sboot.atom.dados.prop.app.domain.Customer;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
@@ -28,4 +31,11 @@ public interface CustomerMapper {
     Customer toCustomer(CustomerRegistrationRequestCustomer customer);
 
     CustomerRegistrationResponse toCustomerRegistrationResponse(Long clientId);
+
+    CustomerInfoResponse toCustomerInfoResponse(Customer customer);
+
+    @Mapping(target = "content", source = "customersInfoPage.content")
+    PageableCustomerResponse toPageableCustomerResponse(Page<CustomerInfoResponse> customersInfoPage);
+
+    PageableResponse toPageableResponse(Pageable pageable);
 }
