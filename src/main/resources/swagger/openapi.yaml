@@ -669,13 +669,8 @@ components:
           description: Número total de páginas.
         totalElements:
           type: integer
+          format: int64
           description: Número total de elementos.
-        last:
-          type: boolean
-          description: Indica se é a última página.
-        first:
-          type: boolean
-          description: Indica se é a primeira página.
         number:
           type: integer
           description: Número da página atual.

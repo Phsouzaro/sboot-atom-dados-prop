@@ -5,9 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import sboot.atom.dados.prop.app.domain.Customer;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
@@ -35,7 +34,17 @@ public interface CustomerMapper {
     CustomerInfoResponse toCustomerInfoResponse(Customer customer);
 
     @Mapping(target = "content", source = "customersInfoPage.content")
+    @Mapping(target = "pageable", expression = "java(toPageableResponse(customersInfoPage.getPageable(), customersInfoPage))")
     PageableCustomerResponse toPageableCustomerResponse(Page<CustomerInfoResponse> customersInfoPage);
 
-    PageableResponse toPageableResponse(Pageable pageable);
+    @Mapping(target = "totalPages", expression = "java(customersInfoPage.getTotalPages())")
+    @Mapping(target = "totalElements", expression = "java(customersInfoPage.getTotalElements())")
+    @Mapping(target = "size", expression = "java(customersInfoPage.getSize())")
+    @Mapping(target = "numberOfElements", expression = "java(customersInfoPage.getNumberOfElements())")
+    @Mapping(target = "number", expression = "java(customersInfoPage.getNumber())")
+    @Mapping(target = "empty", expression = "java(customersInfoPage.isEmpty())")
+    @Mapping(target = "sort", expression = "java(toPeageableResponseSort(customersInfoPage.getSort()))")
+    PageableResponse toPageableResponse(Pageable pageable, Page<CustomerInfoResponse> customersInfoPage);
+
+    PageableResponseSort toPeageableResponseSort(Sort sort);
 }
