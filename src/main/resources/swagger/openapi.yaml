@@ -33,6 +33,41 @@ paths:
         500:
           $ref: '#/components/responses/internalServerError'
 
+  /v1/varejo/customers:
+    get:
+      tags:
+        - listarClientes
+      summary: Obtem lista dos clientes cadastrados
+      description: Nessa operação são retornados os clientes cadastrados de forma paginada, com suporte para filtragem e ordenação.
+      operationId: getPaginatedCustomers
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: Número da página dos resultados.
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Número máximo de resultados por página.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        200:
+          description: Sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageableCustomerResponse'
+        400:
+          $ref: '#/components/responses/badRequestError'
+        500:
+          $ref: '#/components/responses/internalServerError'
+
+
+
       # security:
       #   - Bearer: []
 
@@ -559,6 +594,106 @@ components:
           type: integer
           description: Numero id gerado do cliente.
 
+    CustomerInfoResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome do cliente, representando o nome completo do cliente.
+        email:
+          type: string
+          description: Endereço de e-mail do cliente, utilizado para contato e comunicação.
+        phone:
+          type: object
+          properties:
+            areaCode:
+              type: string
+              description: Código de área do telefone do cliente.
+            number:
+              type: string
+              description: Número de telefone do cliente.
+        address:
+          type: object
+          properties:
+            postalCode:
+              type: string
+              description: Código postal do endereço do cliente.
+            street:
+              type: string
+              description: Nome da rua do endereço do cliente.
+            neighborhood:
+              type: string
+              description: Nome do bairro do endereço do cliente.
+            number:
+              type: integer
+              description: Número da residência do cliente.
+            complement:
+              type: string
+              description: Complemento do endereço do cliente, como apartamento ou sala.
+            city:
+              type: string
+              description: Nome da cidade do endereço do cliente.
+            state:
+              type: string
+              description: Nome do estado do endereço do cliente.
+
+    PageableResponse:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            sorted:
+              type: boolean
+            unsorted:
+              type: boolean
+            empty:
+              type: boolean
+        pageNumber:
+          type: integer
+          description: Número da página atual.
+        pageSize:
+          type: integer
+          description: Número de elementos por página.
+        offset:
+          type: integer
+          description: Offset da página atual.
+        paged:
+          type: boolean
+          description: Indica se a página é paginada.
+        unpaged:
+          type: boolean
+          description: Indica se a página não é paginada.
+        totalPages:
+          type: integer
+          description: Número total de páginas.
+        totalElements:
+          type: integer
+          format: int64
+          description: Número total de elementos.
+        number:
+          type: integer
+          description: Número da página atual.
+        size:
+          type: integer
+          description: Número de elementos na página atual.
+        numberOfElements:
+          type: integer
+          description: Número de elementos na página atual.
+        empty:
+          type: boolean
+          description: Indica se a página está vazia.
+
+    PageableCustomerResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerInfoResponse'
+        pageable:
+          $ref: '#/components/schemas/PageableResponse'
+
     ResponseError:
       type: object
       properties:
@@ -577,6 +712,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Error"
+
 
     Error:
       type: object

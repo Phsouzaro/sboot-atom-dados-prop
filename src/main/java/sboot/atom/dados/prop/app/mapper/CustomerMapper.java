@@ -1,9 +1,11 @@
 package sboot.atom.dados.prop.app.mapper;
 
-import br.com.atom.dados.prop.representation.CustomerRegistrationRequestCustomer;
-import br.com.atom.dados.prop.representation.CustomerRegistrationResponse;
+import br.com.atom.dados.prop.representation.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import sboot.atom.dados.prop.app.domain.Customer;
 
 @Mapper(componentModel = "spring")
@@ -28,4 +30,21 @@ public interface CustomerMapper {
     Customer toCustomer(CustomerRegistrationRequestCustomer customer);
 
     CustomerRegistrationResponse toCustomerRegistrationResponse(Long clientId);
+
+    CustomerInfoResponse toCustomerInfoResponse(Customer customer);
+
+    @Mapping(target = "content", source = "customersInfoPage.content")
+    @Mapping(target = "pageable", expression = "java(toPageableResponse(customersInfoPage.getPageable(), customersInfoPage))")
+    PageableCustomerResponse toPageableCustomerResponse(Page<CustomerInfoResponse> customersInfoPage);
+
+    @Mapping(target = "totalPages", expression = "java(customersInfoPage.getTotalPages())")
+    @Mapping(target = "totalElements", expression = "java(customersInfoPage.getTotalElements())")
+    @Mapping(target = "size", expression = "java(customersInfoPage.getSize())")
+    @Mapping(target = "numberOfElements", expression = "java(customersInfoPage.getNumberOfElements())")
+    @Mapping(target = "number", expression = "java(customersInfoPage.getNumber())")
+    @Mapping(target = "empty", expression = "java(customersInfoPage.isEmpty())")
+    @Mapping(target = "sort", expression = "java(toPeageableResponseSort(customersInfoPage.getSort()))")
+    PageableResponse toPageableResponse(Pageable pageable, Page<CustomerInfoResponse> customersInfoPage);
+
+    PageableResponseSort toPeageableResponseSort(Sort sort);
 }
